@@ -1,4 +1,4 @@
-# Load the primary data science framework and Excel import library
+# To load the primary data science framework and Excel import library
 library(tidyverse)
 library(readxl)
 # Practice Import A: Loading a standard comma-separated plain text file
