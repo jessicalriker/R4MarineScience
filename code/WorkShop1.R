@@ -80,6 +80,17 @@ penguin_ratios <- penguins  |>
 # View your newly engineered variables appended to the far-right columns
 glimpse(penguin_ratios)
 
+#clean_cohort
+clean_cohort <- penguins |>
+  select(species, island, sex, bill_length_mm, bill_depth_mm, body_mass_g) |>
+  filter(
+    !is.na(bill_length_mm),
+    !is.na(bill_depth_mm),
+    !is.na(body_mass_g)
+  )
+
+glimpse(clean_cohort)
+
 
 # Grouping our active memory penguins by species
 grouped_penguins <- group_by(penguins, species)
