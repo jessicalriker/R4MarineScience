@@ -6,8 +6,8 @@ format:
     theme: cosmo          # Modern Bootstrap theme with clean typography
     highlight-style: a11y # High-contrast syntax highlighting for code
     toc-depth: 3          # Captures down to sub-subsections (e.g., 3.1.1)
-    toc-location: left    # Pins TOC to left sidebar so it doesn't block main page
-    toc-title: "Contents" # Custom title for the TOC sidebar
+    # toc-location: left    # Pins TOC to left sidebar so it doesn't block main page
+    # toc-title: "Contents" # Custom title for the TOC sidebar
     number-sections: true # Numbers sections automatically (e.g., 1, 1.1, 2)
     code-fold: true       # Collapses code blocks by default under a dropdown
     code-summary: "Show code" # Label text on collapsed code blocks
