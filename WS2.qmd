@@ -1,0 +1,265 @@
+---
+title: "R4MS WS2 - Final Exercise"
+author: "Jessica Riker"
+format: html
+editor: visual
+---
+
+# Introduction
+
+2.12 Keystone exercise: Estuary Fish Survey - Data Rescue Mission
+The Premise: You have inherited a project from a former PhD student who was studying the relationship between water quality and predatory fish assemblages along the Ross River Estuary gradient. Unfortunately, their data management was entirely manual, and the files are a disaster.
+
+
+```{r}
+# Load packages
+library(tidyverse) 
+library(readxl) 
+```
+
+#Phase 1: Ingestion and Decontamination
+```{r}
+#look at the files in the data folder
+#The catch data is split across 4 tabs in one excel file Load indivudally
+catch1 <- read_excel(here::here("data/workshop2/estuary_catch_log.xlsx"), sheet = "Lower_ross")
+catch2 <- read_excel(here::here("data/workshop2/estuary_catch_log.xlsx"), sheet = 2)
+catch3 <- read_excel(here::here("data/workshop2/estuary_catch_log.xlsx"), sheet = 3)
+catch4 <- read_excel(here::here("data/workshop2/estuary_catch_log.xlsx"), sheet = 4)
+```
+
+```{r}
+# Inspect individual tabs
+catch1
+catch2
+catch3
+catch4
+```
+
+```{r}
+#bind rows
+# Clean up the environment
+catch_data <- bind_rows(catch1, catch2, catch3, catch4)
+# Clean up the environment
+rm(catch1, catch2, catch3, catch4) 
+```
+
+```{r}
+#check data
+catch_data
+head(catch_data)
+glimpse(catch_data)
+str(catch_data)
+```
+
+```{r}
+#look at the distinct values
+catch_data |> 
+  distinct(site)
+
+catch_data |> 
+  distinct(species)
+```
+
+```{r}
+#load metadata
+metadata <- read_csv(here::here("data/workshop2/estuary_metadata.csv"))
+
+#check metadata
+head(metadata)
+glimpse(metadata)
+```
+
+```{r}
+#Fix site names and convert character to factor variables
+catch_data <- catch_data |>
+  mutate(
+    site = str_to_lower(str_trim(site)),
+    site = str_replace_all(site, " ", "_")) |> 
+  # Convert all chr to fct
+  mutate(across(where(is.character), as_factor)
+  )
+
+metadata <- metadata |>
+  mutate(
+    site_name = str_to_lower(str_trim(site_name)),
+    site_name = str_replace_all(site_name, " ", "_")) |> 
+  # Convert all chr to fct
+  mutate(across(where(is.character), as_factor)
+  )
+
+#run a check
+catch_data |> 
+  str()
+
+str(metadata)
+```
+
+```{r}
+#fix names by loading dictionary and check
+species_dict <- read_csv(here::here("data/workshop2/species_dictionary.csv"))
+
+head(species_dict)
+```
+
+```{r}
+#look at names and compare
+catch_data |> 
+  distinct(species)
+
+species_dict |>
+  distinct(common_name)
+
+#fix names
+catch_data <- catch_data |>
+  mutate(
+    species = str_to_lower(str_trim(species)),
+    species = str_replace_all(species, " ", "_")
+  )
+
+#join names
+catch_data <- catch_data |>
+  mutate(common_name = species) |>
+  left_join(species_dict, by = join_by(common_name))
+
+#check
+glimpse(catch_data)
+```
+
+```{r}
+#load in other data
+source(here::here("code/diw_sensor.R"))
+```
+
+
+```{r}
+#join catch with sensor data and meta data
+catch_data_final <- catch_data |>
+  left_join(metadata, by = join_by(site == site_name)) |>
+  left_join(sensor_daily, by = join_by(site, date))
+
+#check
+glimpse(catch_data_final)
+
+#Should have more rows? 480 not 427... missing values or 0s?
+```
+
+
+```{r}
+# fix missing values in catch data
+catch_data_final <- 
+catch_data_final |> 
+  complete(
+    nesting(site, date, 
+           # lat, lon, 
+            zone, mean_temp, mean_salinity, mean_turbidity),
+    scientific_name
+  ) |>
+  mutate(
+    # Convert the resulting NA counts to 0
+    count = coalesce(count, 0)
+  )
+
+#check
+glimpse(catch_data_final)
+#rows now at 480 :)
+```
+
+
+#salinity
+```{r}
+# Make a table
+sal_sum <- 
+  catch_data_final |>
+  group_by(zone) |>
+  summarise(
+    sd_salinity = sd(mean_salinity, na.rm = TRUE),
+    median_salinity = median(mean_salinity, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+# Make a plot
+sal_sum |> 
+  ggplot(aes(x = zone, y = median_salinity)) +
+  geom_point() +
+  geom_errorbar(aes(ymin = median_salinity - sd_salinity, ymax = median_salinity + sd_salinity), width = 0.2) +
+  theme_classic() +
+  labs(
+       x = "Zone",
+       y = "Median Salinity (ppt)")
+```
+
+#Turbidity
+```{r}
+turb_sum <- 
+  catch_data_final |>
+  group_by(zone) |>
+  summarise(
+    sd_turbidity = sd(mean_turbidity, na.rm = TRUE),
+    median_turbidity = median(mean_turbidity, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+turb_sum |>
+  ggplot(aes(x = zone, y = median_turbidity)) +
+  geom_point() +
+  geom_errorbar(aes(ymin = median_turbidity - sd_turbidity, ymax = median_turbidity + sd_turbidity), width = 0.2) +
+  theme_minimal() +
+  labs(
+       x = "Zone",
+       y = "Median Turbidity (NTU)")
+```
+
+#temp
+```{r}
+temp_sum <- 
+  catch_data_final |>
+  group_by(zone) |>
+  summarise(
+    sd_temperature = sd(mean_temp, na.rm = TRUE),
+    median_temperature = median(mean_temp, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+temp_sum |>
+  ggplot(aes(x = zone, y = median_temperature)) +
+  geom_point() +
+  geom_errorbar(aes(ymin = median_temperature - sd_temperature, ymax = median_temperature + sd_temperature), width = 0.2) +
+  theme_minimal() +
+  labs(
+       x = "Zone",
+       y = "Median Temperature (°C)")
+```
+#only salinity didnt have the error bars cross each other so this is what we are looking at
+
+```{r}
+# look at stats
+fish_stats <- catch_data_final |>
+  group_by(zone, scientific_name) |>
+  summarise(
+    mean_catch = mean(count),
+    sem_catch = sd(count) / sqrt(n()),
+    .groups = "drop"
+  )
+
+# plot
+fish_stats |> 
+  ggplot(aes(x = zone, y = mean_catch, fill = scientific_name)) +
+  geom_line(group = 1) +
+  geom_point(data = catch_data_final, aes(x = zone, y = count),
+             position = position_jitter(width = 0.2), alpha = 0.2, size = 1, inherit.aes = FALSE) + 
+  geom_point(position = "dodge", size = 4, pch = 23) +
+  geom_errorbar(aes(ymin = mean_catch - sem_catch, ymax = mean_catch + sem_catch), 
+                position = position_dodge(0.9), width = 0.2) + 
+  facet_wrap(~ scientific_name, scales = "fixed") +
+  theme_minimal() +
+  theme(
+    strip.text = element_text(face = "italic", size = 10, colour = "black"), 
+    legend.position = "none" 
+  ) +
+  labs(
+    x = "Spatial Zone",
+    y = expression("Abundance (n day"^-1*")"),
+    y = "Abundance (per day)"
+  )
+```
+

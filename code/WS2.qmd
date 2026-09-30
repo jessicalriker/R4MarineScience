@@ -1,0 +1,86 @@
+---
+title: "WS2"
+author: "Jessica Riker"
+format: html
+editor: visual
+---
+
+#lead packages
+```{r}
+# Make sure packages are loaded
+library(tidyverse)
+library(palmerpenguins)
+
+# The messy metadata provided by your colleague
+island_metadata <- tibble(
+  island_name = c(" biscoe", "Dream ", "Torgersen"),
+  station_install = c("15/01/2003", "22-03-2004", "05/11/2001"),
+  latitude = c(-64.81, -64.73, -64.76)
+)
+
+print(island_metadata)
+
+```
+
+
+#2.11 Practical Exercises: Penguins, Pivots, and Joining Data
+```{r}
+#Exercise 1: Task: Create a new object called clean_metadata. Using mutate(), stringr, and lubridate, fix the island_name column so that it perfectly matches the island column in the penguins dataset (hint: watch out for those hidden spaces!). Then, convert the station_install column into a proper Date object.
+
+
+#step 1: Clean the island_name column
+clean_metadata <- island_metadata |>
+  mutate(island_name = str_trim(island_name)) |>
+  mutate(station_install = lubridate::dmy(station_install))
+
+#step 2: Check the results
+print(clean_metadata)
+
+
+
+#Exercise 2: Task: Create a new object called penguins_spatial. Use a left_join() to attach your clean_metadata to the main penguins dataset. Hint: Because the column containing the island names is called island in the penguins dataset, and island_name in your metadata, you will need to specify how they match using by = join_by(island == island_name).
+
+
+#Step 1: Join the clean_metadata with the penguins dataset using a left_join() to create a new object called penguins_with_metadata. Make sure to join on the correct columns (island_name and island).
+
+penguins_spatial <- left_join(penguins, clean_metadata, by = c("island" = "island_name"))
+
+#step 2: Check the results
+print(penguins_spatial)
+
+# Step 3: Scroll to the right to see the new columns
+head(penguins_spatial)
+
+
+#Exercise 3: The Wide Summary Matrix
+#A collaborator has asked for a clean, publication-ready table showing the maximum body mass recorded for each species, separated by island.
+#Task: Starting with your penguins_spatial dataset:
+#Drop any missing values in the body_mass_g column.
+#Group by species and island.
+#Summarise the data to find the maximum body mass (max()).
+#Pivot the dataset wider so that the species form the rows, and the islands form the columns.
+
+#step 1: Drop missing values in the body_mass_g column
+penguins_clean <- penguins_spatial |>
+  drop_na(body_mass_g)
+
+#step 2: Group by species and island
+penguins_grouped <- penguins_clean |>
+  group_by(species, island)
+
+#step 3: Summarise the data to find the maximum body mass
+penguins_summary <- penguins_grouped |>
+  summarise(max_body_mass = max(body_mass_g), .groups = "drop")
+
+#step 4: Pivot the dataset wider so that the species form the rows, and the islands form the columns
+penguins_wide <- penguins_summary |>
+  pivot_wider(names_from = island, values_from = max_body_mass)
+
+#step 5: Check the results
+print(penguins_wide)
+```
+
+```{r}
+
+```
+
