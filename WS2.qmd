@@ -5,7 +5,6 @@ format:
   html:
     theme: cosmo          # Modern Bootstrap theme with clean typography
     highlight-style: a11y # High-contrast syntax highlighting for code
-    toc: true             # Includes a Table of Contents
     toc-depth: 3          # Captures down to sub-subsections (e.g., 3.1.1)
     toc-location: left    # Pins TOC to left sidebar so it doesn't block main page
     toc-title: "Contents" # Custom title for the TOC sidebar
