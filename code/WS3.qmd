@@ -7,15 +7,29 @@ editor: visual
 ```{r}
 library(tidyverse)
 library(readxl)
+library(patchwork)
+library(png)
+library(grid)
 
 killer_whales <- read_excel(here::here("data/workshop3/journal.pone.0299291.s001.xlsx"))
 
-view(killer_whales)
+summary(killer_whales)
+
+names(killer_whales)
 ```
 
 ```{r}
 glimpse(killer_whales)
 ```
+
+```{r}
+#load in table2 for prey data
+prey_data <- read_excel(here::here("data/workshop3/S2.xlsx"))
+
+names(prey_data)
+summary(prey_data)
+```
+
 
 ```{r}
 monthly_occurrences <- killer_whales %>%
@@ -60,18 +74,26 @@ monthly_occurrences <- monthly_occurrences %>%
 
 #step 8: write plot code
 ggplot(monthly_occurrences, aes(x = Month_A, y = occurrences)) +
-  geom_col(fill = "steelblue") +
-  labs(x = "Month", y = "Number of Occurrences", title = "Killer Whale Occurrences by Month", fill = "Occurrences") +
+  geom_col(fill = "lightblue") +
+  labs(
+    x = "Month",
+    y = "Number of Occurrences",
+    title = "Killer Whale Occurrences by Month",
+    fill = "Occurrences"
+  ) +
   theme_classic() +
-  geom_hline(yintercept = mean(monthly_occurrences$occurrences), color = "red", linetype = "dashed") +
-  geom_vline(xintercept = 6.5, color = "green", linetype = "dotted") +
-  geom_text(aes(x = 6.5, y = max(monthly_occurrences$occurrences), label = "Mid-Year"), color = "black", size = 4)
-
+   theme(
+    axis.title = element_text(size = 14),
+    axis.text = element_text(size = 12),
+    legend.title = element_text(size = 12),
+    legend.text = element_text(size = 11),
+    plot.title = element_text(size = 16)
+  )
 
 ```
 
 ```{r}
-# Calculate monthly mean group size and standard error
+# Calculate monthly mean group size
 monthly_summary <- killer_whales %>%
   group_by(Month_A) %>%
   summarise(
@@ -82,16 +104,240 @@ monthly_summary <- killer_whales %>%
   )
 
 # Put months in chronological order
-monthly_summary$Month_A <- factor(
-  monthly_summary$Month_A,
-  levels = c("Jan", "Feb", "Mar", "Apr", "May", "Jun",
-             "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+monthly_summary <- monthly_summary %>%
+  mutate(
+    Month_A = factor(
+      Month_A,
+      levels = month.name
+    )
+  )
+
+# Plot mean group size by month
+ggplot(monthly_summary, aes(x = Month_A, y = mean_group_size)) +
+  geom_col(fill = "steelblue") +
+   geom_errorbar(
+    aes(
+      ymin = mean_group_size - se_group_size,
+      ymax = mean_group_size + se_group_size
+    ),
+    width = 0.2
+  ) +
+  labs(
+    x = "Month",
+    y = "Mean Group Size",
+    title = "Mean Killer Whale Group Size by Month"
+  ) +
+  theme_classic() + 
+   theme(
+    axis.title = element_text(size = 14),
+    axis.text = element_text(size = 12),
+    legend.title = element_text(size = 12),
+    legend.text = element_text(size = 11),
+    plot.title = element_text(size = 16)
+  )
+```
+
+```{r}
+#create a month variable
+prey_data <- prey_data %>%
+  mutate(
+    Month_A = month(`Date (Mo/Dy/Yr)`, label = TRUE, abbr = FALSE)
+  )
+
+prey_data <- prey_data %>%
+  mutate(
+    `Prey Species` = str_to_title(`Prey Species`)
+  )
+
+prey_data <- prey_data %>%
+  mutate(
+    `Prey Species` = ifelse(
+      `Prey Species` == "Habor Seal",
+      "Harbor Seal",
+      `Prey Species`
+    )
+  )
+
+head(prey_data)
+```
+
+```{r}
+#count prey abundance by month
+prey_monthly <- prey_data %>%
+  filter(
+    !is.na(`Prey Species`),
+    `Prey Species` != "N/A"
+  ) %>%
+  group_by(Month_A, `Prey Species`) %>%
+  summarise(
+    occurrences = n(),
+    .groups = "drop"
+  )
+
+#put months in order
+prey_monthly <- prey_monthly %>%
+  mutate(
+    Month_A = factor(
+      Month_A,
+      levels = month.name
+    )
+  )
+
+prey_data <- prey_data %>%
+  mutate(
+    `Prey Species` = case_when(
+      `Prey Species` == "California Sea Lion" ~ "California sea lion",
+      `Prey Species` == "Common Dolphin" ~ "Common dolphin",
+      `Prey Species` == "Gray Whale Calf" ~ "Grey whale calf",
+      `Prey Species` == "Harbor Porpoise" ~ "Harbour porpoise",
+      `Prey Species` == "Harbor Seal" ~ "Harbour seal",
+      `Prey Species` == "Northern Elephant Seal" ~ "Northern elephant seal",
+      `Prey Species` == "Pacific White-Sided Dolphin" ~ "Pacific white-sided dolphin",
+      `Prey Species` == "Minke Whale" ~ "Minke whale",
+      `Prey Species` == "Dall's Porpoise" ~ "Dall's porpoise",
+      TRUE ~ `Prey Species`
+    )
+  )
+
+prey_monthly <- prey_data %>%
+  filter(
+    !is.na(`Prey Species`),
+    `Prey Species` != "N/A",
+    `Prey Species` != "Unk"
+  ) %>%
+  group_by(Month_A, `Prey Species`) %>%
+  summarise(
+    occurrences = n(),
+    .groups = "drop"
+  )
+
+prey_monthly
+```
+
+```{r}
+# make plot
+ggplot(prey_monthly, aes(x = Month_A, y = occurrences, fill = `Prey Species`)) +
+  geom_col(position = "dodge") +
+   scale_fill_manual(
+    values = c(
+    "#08306B",
+    "#2171B5",
+    "#4292C6",
+    "#6BAED6",
+    "#9ECAE1",
+    "#C6DBEF",
+    "#DEEBF7",
+    "#4D4D4D",
+    "#969696",
+    "#BDBDBD",
+    "#D9D9D9"
+    )
+  ) +
+  labs(
+    x = "Month",
+    y = "Number of Prey Occurrences",
+    title = "Killer Whale Prey Abundance by Month",
+    fill = "Prey Species"
+  ) +
+  theme_classic() +
+ theme(
+    axis.title = element_text(size = 14),
+    axis.text = element_text(size = 12),
+    legend.title = element_text(size = 12),
+    legend.text = element_text(size = 11),
+    plot.title = element_text(size = 16)
+  )
+```
+
+```{r}
+#add image
+prey_image <- rasterGrob(
+  readPNG(here::here("docs", "WS3_Pic.png")),
+  interpolate = TRUE
 )
+```
 
-# Check that the columns exist
-monthly_summary
+```{r}
+#save graphs as objects
+plot1 <- ggplot(monthly_occurrences, aes(x = Month_A, y = occurrences)) +
+  geom_col(fill = "lightblue") +
+  labs(
+    x = "Month",
+    y = "Number of Occurrences",
+    title = "Killer Whale Occurrences by Month"
+  ) +
+  theme_classic() + 
+   theme(
+    axis.title = element_text(size = 14),
+    axis.text = element_text(size = 12),
+    legend.title = element_text(size = 12),
+    legend.text = element_text(size = 11),
+    plot.title = element_text(size = 16)
+  )
 
-#plot the means
-ggplot(monthly_occurrences, aes(x = Month_A, y = occurrences)) + geom_col(fill = "steelblue") + geom_errorbar( aes( ymin = occurrences - se_group_size, ymax = occurrences + se_group_size ), width = 0.2 ) + labs( x = "Month", y = "Number of Occurrences", title = "Killer Whale Occurences by Month" ) + theme_classic()
+plot2 <- ggplot(monthly_summary, aes(x = Month_A, y = mean_group_size)) +
+  geom_col(fill = "steelblue") +
+  geom_errorbar(
+    aes(
+      ymin = mean_group_size - se_group_size,
+      ymax = mean_group_size + se_group_size
+    ),
+    width = 0.2
+  ) +
+  labs(
+    x = "Month",
+    y = "Mean Group Size",
+    title = "Mean Killer Whale Group Size by Month"
+  ) +
+  theme_classic() + 
+   theme(
+    axis.title = element_text(size = 14),
+    axis.text = element_text(size = 12),
+    legend.title = element_text(size = 12),
+    legend.text = element_text(size = 11),
+    plot.title = element_text(size = 16)
+  )
+
+plot3 <- ggplot(prey_monthly, aes(x = Month_A, y = occurrences, fill = `Prey Species`)) +
+  geom_col(position = "dodge") +
+   scale_fill_manual(
+    values = c(
+    "#08306B",
+    "#2171B5",
+    "#4292C6",
+    "#6BAED6",
+    "#9ECAE1",
+    "#C6DBEF",
+    "#DEEBF7",
+    "#4D4D4D",
+    "#969696",
+    "#BDBDBD",
+    "#D9D9D9"
+    )
+  ) +
+  labs(
+    x = "Month",
+    y = "Number of Prey Occurrences",
+    title = "Killer Whale Prey Abundance by Month",
+    fill = "Prey Species"
+  ) +
+  theme_classic() +
+   theme(
+    axis.title = element_text(size = 14),
+    axis.text = element_text(size = 12),
+    legend.title = element_text(size = 12),
+    legend.text = element_text(size = 11),
+    plot.title = element_text(size = 16)
+  )
+
+plot4 <- wrap_elements(prey_image)
+```
+
+```{r}
+# create figure caption
+#| label: fig-workshop3
+#| fig-cap: " Killer whale occurrences, mean group size, and prey abundance by month. The top left panel shows the number of killer whale occurrences by month. The top right panel shows the mean group size of killer whales by month with standard error bars. The bottom left panel shows the number of prey occurrences by month for each prey species."
+#combine plots
+plot1 / plot2 / plot3 / plot4
 ```
 
