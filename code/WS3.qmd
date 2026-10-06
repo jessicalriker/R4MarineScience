@@ -1,0 +1,97 @@
+---
+title: "WS3"
+format: html
+editor: visual
+---
+
+```{r}
+library(tidyverse)
+library(readxl)
+
+killer_whales <- read_excel(here::here("data/workshop3/journal.pone.0299291.s001.xlsx"))
+
+view(killer_whales)
+```
+
+```{r}
+glimpse(killer_whales)
+```
+
+```{r}
+monthly_occurrences <- killer_whales %>%
+  group_by(Month, Month_A) %>%
+  summarise(
+    occurrences = n(),
+    .groups = "drop"
+  ) %>%
+  complete(
+    Month = 1:12,
+    fill = list(occurrences = 0)
+  ) %>%
+  mutate(
+    Month_A = month.name[Month]
+  ) %>%
+  arrange(Month)
+
+monthly_occurrences
+```
+
+```{r}
+#Step one: Create a bar chart of the number of killer-whale occurrences by month and have the months on the chart in order from January to December. Use the Month_A variable for the x-axis and the occurrences variable for the y-axis. Use the geom_col() function to create the bar chart. Add labels to the x-axis, y-axis, and title of the chart. Use the theme_classic() function to change the theme of the chart.
+
+#step 2: Add a color to the bars of the chart. Use the fill argument in the geom_col() function to change the color of the bars. Use a color that is not too bright or too dark. Use the scale_fill_manual() function to change the color of the bars. Use a color that is not too bright or too dark.
+
+#step 3: Add a legend to the chart. Use the labs() function to add a legend to the chart. Use the fill argument in the labs() function to add a legend to the chart. Use a title for the legend that is descriptive of the data being displayed.
+
+#step 4: Add a horizontal line to the chart. Use the geom_hline() function to add a horizontal line to the chart. Use the yintercept argument in the geom_hline() function to specify the y-value of the horizontal line. Use a color that is not too bright or too dark. Use the linetype argument in the geom_hline() function to specify the type of line to be drawn.
+
+#step 5: Add a vertical line to the chart. Use the geom_vline() function to add a vertical line to the chart. Use the xintercept argument in the geom_vline() function to specify the x-value of the vertical line. Use a color that is not too bright or too dark. Use the linetype argument in the geom_vline() function to specify the type of line to be drawn.
+
+#step 6: Add a text label to the chart. Use the geom_text() function to add a text label to the chart. Use the x and y arguments in the geom_text() function to specify the position of the text label. Use the label argument in the geom_text() function to specify the text to be displayed. Use a color that is not too bright or too dark. Use the size argument in the geom_text() function to specify the size of the text label.
+
+#step 7: Write code to make month_A an ordered factor
+monthly_occurrences <- monthly_occurrences %>%
+  mutate(
+    Month_A = factor(
+      Month_A,
+      levels = month.name
+    )
+  )
+
+#step 8: write plot code
+ggplot(monthly_occurrences, aes(x = Month_A, y = occurrences)) +
+  geom_col(fill = "steelblue") +
+  labs(x = "Month", y = "Number of Occurrences", title = "Killer Whale Occurrences by Month", fill = "Occurrences") +
+  theme_classic() +
+  geom_hline(yintercept = mean(monthly_occurrences$occurrences), color = "red", linetype = "dashed") +
+  geom_vline(xintercept = 6.5, color = "green", linetype = "dotted") +
+  geom_text(aes(x = 6.5, y = max(monthly_occurrences$occurrences), label = "Mid-Year"), color = "black", size = 4)
+
+
+```
+
+```{r}
+# Calculate monthly mean group size and standard error
+monthly_summary <- killer_whales %>%
+  group_by(Month_A) %>%
+  summarise(
+    mean_group_size = mean(Group_size, na.rm = TRUE),
+    sd_group_size = sd(Group_size, na.rm = TRUE),
+    n_group = sum(!is.na(Group_size)),
+    se_group_size = sd_group_size / sqrt(n_group)
+  )
+
+# Put months in chronological order
+monthly_summary$Month_A <- factor(
+  monthly_summary$Month_A,
+  levels = c("Jan", "Feb", "Mar", "Apr", "May", "Jun",
+             "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+)
+
+# Check that the columns exist
+monthly_summary
+
+#plot the means
+ggplot(monthly_occurrences, aes(x = Month_A, y = occurrences)) + geom_col(fill = "steelblue") + geom_errorbar( aes( ymin = occurrences - se_group_size, ymax = occurrences + se_group_size ), width = 0.2 ) + labs( x = "Month", y = "Number of Occurrences", title = "Killer Whale Occurences by Month" ) + theme_classic()
+```
+
