@@ -36,11 +36,11 @@ summary(prey_data)
 ```{r}
 #add the original graph
 original_image <- rasterGrob(
-  readPNG(here::here("outputs", "figures", "Graph_From_Source.png")),
+  readPNG(here::here("outputs", "figures", "Graph_From_Source.PNG")),
   interpolate = TRUE
 )
 
-file.exists(here::here("outputs", "figures", "Graph_From_Source.png"))
+file.exists(here::here("outputs", "figures", "Graph_From_Source.PNG"))
 ```
 ```{r}
 #add image to qmd
@@ -48,7 +48,7 @@ file.exists(here::here("outputs", "figures", "Graph_From_Source.png"))
 #| fig-cap: "Original graph from the source study."
 
 knitr::include_graphics(
-  here::here("outputs", "figures", "Graph_From_Source.png")
+  here::here("outputs", "figures", "Graph_From_Source.PNG")
 )
 ```
 
