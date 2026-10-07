@@ -693,22 +693,29 @@ $ Season     &lt;chr&gt; "Spring", "Spring", "Spring", "Spring", "Spring", "Spri
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb180"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb180-1"><a href="#cb180-1" aria-hidden="true" tabindex="-1"></a>monthly_occurrences <span class="ot">&lt;-</span> killer_whales <span class="sc">%&gt;%</span></span>
-<span id="cb180-2"><a href="#cb180-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Month, Month_A) <span class="sc">%&gt;%</span></span>
-<span id="cb180-3"><a href="#cb180-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb180-4"><a href="#cb180-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">occurrences =</span> <span class="fu">n</span>(),</span>
-<span id="cb180-5"><a href="#cb180-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span></span>
-<span id="cb180-6"><a href="#cb180-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb180-7"><a href="#cb180-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">complete</span>(</span>
-<span id="cb180-8"><a href="#cb180-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">Month =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>,</span>
-<span id="cb180-9"><a href="#cb180-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="fu">list</span>(<span class="at">occurrences =</span> <span class="dv">0</span>)</span>
-<span id="cb180-10"><a href="#cb180-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb180-11"><a href="#cb180-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb180-12"><a href="#cb180-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">Month_A =</span> month.name[Month]</span>
-<span id="cb180-13"><a href="#cb180-13" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb180-14"><a href="#cb180-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(Month)</span>
-<span id="cb180-15"><a href="#cb180-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb180-16"><a href="#cb180-16" aria-hidden="true" tabindex="-1"></a>monthly_occurrences</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb180"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb180-1"><a href="#cb180-1" aria-hidden="true" tabindex="-1"></a><span class="co">#add the original graph</span></span>
+<span id="cb180-2"><a href="#cb180-2" aria-hidden="true" tabindex="-1"></a>original_image <span class="ot">&lt;-</span> <span class="fu">rasterGrob</span>(</span>
+<span id="cb180-3"><a href="#cb180-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">readPNG</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"outputs"</span>, <span class="st">"figures"</span>, <span class="st">"Graph_From_Source.png"</span>)),</span>
+<span id="cb180-4"><a href="#cb180-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">interpolate =</span> <span class="cn">TRUE</span></span>
+<span id="cb180-5"><a href="#cb180-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb181"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb181-1"><a href="#cb181-1" aria-hidden="true" tabindex="-1"></a>monthly_occurrences <span class="ot">&lt;-</span> killer_whales <span class="sc">%&gt;%</span></span>
+<span id="cb181-2"><a href="#cb181-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Month, Month_A) <span class="sc">%&gt;%</span></span>
+<span id="cb181-3"><a href="#cb181-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb181-4"><a href="#cb181-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">occurrences =</span> <span class="fu">n</span>(),</span>
+<span id="cb181-5"><a href="#cb181-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span></span>
+<span id="cb181-6"><a href="#cb181-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb181-7"><a href="#cb181-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">complete</span>(</span>
+<span id="cb181-8"><a href="#cb181-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">Month =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>,</span>
+<span id="cb181-9"><a href="#cb181-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="fu">list</span>(<span class="at">occurrences =</span> <span class="dv">0</span>)</span>
+<span id="cb181-10"><a href="#cb181-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb181-11"><a href="#cb181-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb181-12"><a href="#cb181-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">Month_A =</span> month.name[Month]</span>
+<span id="cb181-13"><a href="#cb181-13" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb181-14"><a href="#cb181-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(Month)</span>
+<span id="cb181-15"><a href="#cb181-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb181-16"><a href="#cb181-16" aria-hidden="true" tabindex="-1"></a>monthly_occurrences</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 12 × 3
    Month Month_A   occurrences
@@ -728,99 +735,48 @@ $ Season     &lt;chr&gt; "Spring", "Spring", "Spring", "Spring", "Spring", "Spri
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb182"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb182-1"><a href="#cb182-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Step one: Create a bar chart of the number of killer-whale occurrences by month and have the months on the chart in order from January to December. Use the Month_A variable for the x-axis and the occurrences variable for the y-axis. Use the geom_col() function to create the bar chart. Add labels to the x-axis, y-axis, and title of the chart. Use the theme_classic() function to change the theme of the chart.</span></span>
-<span id="cb182-2"><a href="#cb182-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb182-3"><a href="#cb182-3" aria-hidden="true" tabindex="-1"></a><span class="co">#step 2: Add a color to the bars of the chart. Use the fill argument in the geom_col() function to change the color of the bars. Use a color that is not too bright or too dark. Use the scale_fill_manual() function to change the color of the bars. Use a color that is not too bright or too dark.</span></span>
-<span id="cb182-4"><a href="#cb182-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb182-5"><a href="#cb182-5" aria-hidden="true" tabindex="-1"></a><span class="co">#step 3: Add a legend to the chart. Use the labs() function to add a legend to the chart. Use the fill argument in the labs() function to add a legend to the chart. Use a title for the legend that is descriptive of the data being displayed.</span></span>
-<span id="cb182-6"><a href="#cb182-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb182-7"><a href="#cb182-7" aria-hidden="true" tabindex="-1"></a><span class="co">#step 4: Add a horizontal line to the chart. Use the geom_hline() function to add a horizontal line to the chart. Use the yintercept argument in the geom_hline() function to specify the y-value of the horizontal line. Use a color that is not too bright or too dark. Use the linetype argument in the geom_hline() function to specify the type of line to be drawn.</span></span>
-<span id="cb182-8"><a href="#cb182-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb182-9"><a href="#cb182-9" aria-hidden="true" tabindex="-1"></a><span class="co">#step 5: Add a vertical line to the chart. Use the geom_vline() function to add a vertical line to the chart. Use the xintercept argument in the geom_vline() function to specify the x-value of the vertical line. Use a color that is not too bright or too dark. Use the linetype argument in the geom_vline() function to specify the type of line to be drawn.</span></span>
-<span id="cb182-10"><a href="#cb182-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb182-11"><a href="#cb182-11" aria-hidden="true" tabindex="-1"></a><span class="co">#step 6: Add a text label to the chart. Use the geom_text() function to add a text label to the chart. Use the x and y arguments in the geom_text() function to specify the position of the text label. Use the label argument in the geom_text() function to specify the text to be displayed. Use a color that is not too bright or too dark. Use the size argument in the geom_text() function to specify the size of the text label.</span></span>
-<span id="cb182-12"><a href="#cb182-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb182-13"><a href="#cb182-13" aria-hidden="true" tabindex="-1"></a><span class="co">#step 7: Write code to make month_A an ordered factor</span></span>
-<span id="cb182-14"><a href="#cb182-14" aria-hidden="true" tabindex="-1"></a>monthly_occurrences <span class="ot">&lt;-</span> monthly_occurrences <span class="sc">%&gt;%</span></span>
-<span id="cb182-15"><a href="#cb182-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb182-16"><a href="#cb182-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">Month_A =</span> <span class="fu">factor</span>(</span>
-<span id="cb182-17"><a href="#cb182-17" aria-hidden="true" tabindex="-1"></a>      Month_A,</span>
-<span id="cb182-18"><a href="#cb182-18" aria-hidden="true" tabindex="-1"></a>      <span class="at">levels =</span> month.name</span>
-<span id="cb182-19"><a href="#cb182-19" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb182-20"><a href="#cb182-20" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb182-21"><a href="#cb182-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb182-22"><a href="#cb182-22" aria-hidden="true" tabindex="-1"></a><span class="co">#step 8: write plot code</span></span>
-<span id="cb182-23"><a href="#cb182-23" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(monthly_occurrences, <span class="fu">aes</span>(<span class="at">x =</span> Month_A, <span class="at">y =</span> occurrences)) <span class="sc">+</span></span>
-<span id="cb182-24"><a href="#cb182-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"lightblue"</span>) <span class="sc">+</span></span>
-<span id="cb182-25"><a href="#cb182-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb182-26"><a href="#cb182-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Month"</span>,</span>
-<span id="cb182-27"><a href="#cb182-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Number of Occurrences"</span>,</span>
-<span id="cb182-28"><a href="#cb182-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Killer Whale Occurrences by Month"</span>,</span>
-<span id="cb182-29"><a href="#cb182-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"Occurrences"</span></span>
-<span id="cb182-30"><a href="#cb182-30" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb182-31"><a href="#cb182-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
-<span id="cb182-32"><a href="#cb182-32" aria-hidden="true" tabindex="-1"></a>   <span class="fu">theme</span>(</span>
-<span id="cb182-33"><a href="#cb182-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>),</span>
-<span id="cb182-34"><a href="#cb182-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
-<span id="cb182-35"><a href="#cb182-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
-<span id="cb182-36"><a href="#cb182-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>),</span>
-<span id="cb182-37"><a href="#cb182-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>)</span>
-<span id="cb182-38"><a href="#cb182-38" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb183"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb183-1"><a href="#cb183-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Step one: Create a bar chart of the number of killer-whale occurrences by month and have the months on the chart in order from January to December. Use the Month_A variable for the x-axis and the occurrences variable for the y-axis. Use the geom_col() function to create the bar chart. Add labels to the x-axis, y-axis, and title of the chart. Use the theme_classic() function to change the theme of the chart.</span></span>
+<span id="cb183-2"><a href="#cb183-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb183-3"><a href="#cb183-3" aria-hidden="true" tabindex="-1"></a><span class="co">#step 2: Add a color to the bars of the chart. Use the fill argument in the geom_col() function to change the color of the bars. Use a color that is not too bright or too dark. Use the scale_fill_manual() function to change the color of the bars. Use a color that is not too bright or too dark.</span></span>
+<span id="cb183-4"><a href="#cb183-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb183-5"><a href="#cb183-5" aria-hidden="true" tabindex="-1"></a><span class="co">#step 3: Add a legend to the chart. Use the labs() function to add a legend to the chart. Use the fill argument in the labs() function to add a legend to the chart. Use a title for the legend that is descriptive of the data being displayed.</span></span>
+<span id="cb183-6"><a href="#cb183-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb183-7"><a href="#cb183-7" aria-hidden="true" tabindex="-1"></a><span class="co">#step 4: Add a horizontal line to the chart. Use the geom_hline() function to add a horizontal line to the chart. Use the yintercept argument in the geom_hline() function to specify the y-value of the horizontal line. Use a color that is not too bright or too dark. Use the linetype argument in the geom_hline() function to specify the type of line to be drawn.</span></span>
+<span id="cb183-8"><a href="#cb183-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb183-9"><a href="#cb183-9" aria-hidden="true" tabindex="-1"></a><span class="co">#step 5: Add a vertical line to the chart. Use the geom_vline() function to add a vertical line to the chart. Use the xintercept argument in the geom_vline() function to specify the x-value of the vertical line. Use a color that is not too bright or too dark. Use the linetype argument in the geom_vline() function to specify the type of line to be drawn.</span></span>
+<span id="cb183-10"><a href="#cb183-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb183-11"><a href="#cb183-11" aria-hidden="true" tabindex="-1"></a><span class="co">#step 6: Add a text label to the chart. Use the geom_text() function to add a text label to the chart. Use the x and y arguments in the geom_text() function to specify the position of the text label. Use the label argument in the geom_text() function to specify the text to be displayed. Use a color that is not too bright or too dark. Use the size argument in the geom_text() function to specify the size of the text label.</span></span>
+<span id="cb183-12"><a href="#cb183-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb183-13"><a href="#cb183-13" aria-hidden="true" tabindex="-1"></a><span class="co">#step 7: Write code to make month_A an ordered factor</span></span>
+<span id="cb183-14"><a href="#cb183-14" aria-hidden="true" tabindex="-1"></a>monthly_occurrences <span class="ot">&lt;-</span> monthly_occurrences <span class="sc">%&gt;%</span></span>
+<span id="cb183-15"><a href="#cb183-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb183-16"><a href="#cb183-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">Month_A =</span> <span class="fu">factor</span>(</span>
+<span id="cb183-17"><a href="#cb183-17" aria-hidden="true" tabindex="-1"></a>      Month_A,</span>
+<span id="cb183-18"><a href="#cb183-18" aria-hidden="true" tabindex="-1"></a>      <span class="at">levels =</span> month.name</span>
+<span id="cb183-19"><a href="#cb183-19" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb183-20"><a href="#cb183-20" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb183-21"><a href="#cb183-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb183-22"><a href="#cb183-22" aria-hidden="true" tabindex="-1"></a><span class="co">#step 8: write plot code</span></span>
+<span id="cb183-23"><a href="#cb183-23" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(monthly_occurrences, <span class="fu">aes</span>(<span class="at">x =</span> Month_A, <span class="at">y =</span> occurrences)) <span class="sc">+</span></span>
+<span id="cb183-24"><a href="#cb183-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"lightblue"</span>) <span class="sc">+</span></span>
+<span id="cb183-25"><a href="#cb183-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb183-26"><a href="#cb183-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Month"</span>,</span>
+<span id="cb183-27"><a href="#cb183-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Number of Occurrences"</span>,</span>
+<span id="cb183-28"><a href="#cb183-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Killer Whale Occurrences by Month"</span>,</span>
+<span id="cb183-29"><a href="#cb183-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"Occurrences"</span></span>
+<span id="cb183-30"><a href="#cb183-30" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb183-31"><a href="#cb183-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb183-32"><a href="#cb183-32" aria-hidden="true" tabindex="-1"></a>   <span class="fu">theme</span>(</span>
+<span id="cb183-33"><a href="#cb183-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>),</span>
+<span id="cb183-34"><a href="#cb183-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
+<span id="cb183-35"><a href="#cb183-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
+<span id="cb183-36"><a href="#cb183-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>),</span>
+<span id="cb183-37"><a href="#cb183-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>)</span>
+<span id="cb183-38"><a href="#cb183-38" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Ignoring unknown labels:
 • fill : "Occurrences"</code></pre>
 </div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="WS3_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb184"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb184-1"><a href="#cb184-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate monthly mean group size</span></span>
-<span id="cb184-2"><a href="#cb184-2" aria-hidden="true" tabindex="-1"></a>monthly_summary <span class="ot">&lt;-</span> killer_whales <span class="sc">%&gt;%</span></span>
-<span id="cb184-3"><a href="#cb184-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Month_A) <span class="sc">%&gt;%</span></span>
-<span id="cb184-4"><a href="#cb184-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb184-5"><a href="#cb184-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_group_size =</span> <span class="fu">mean</span>(Group_size, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb184-6"><a href="#cb184-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">sd_group_size =</span> <span class="fu">sd</span>(Group_size, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb184-7"><a href="#cb184-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_group =</span> <span class="fu">sum</span>(<span class="sc">!</span><span class="fu">is.na</span>(Group_size)),</span>
-<span id="cb184-8"><a href="#cb184-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">se_group_size =</span> sd_group_size <span class="sc">/</span> <span class="fu">sqrt</span>(n_group)</span>
-<span id="cb184-9"><a href="#cb184-9" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb184-10"><a href="#cb184-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb184-11"><a href="#cb184-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Put months in chronological order</span></span>
-<span id="cb184-12"><a href="#cb184-12" aria-hidden="true" tabindex="-1"></a>monthly_summary <span class="ot">&lt;-</span> monthly_summary <span class="sc">%&gt;%</span></span>
-<span id="cb184-13"><a href="#cb184-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb184-14"><a href="#cb184-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">Month_A =</span> <span class="fu">factor</span>(</span>
-<span id="cb184-15"><a href="#cb184-15" aria-hidden="true" tabindex="-1"></a>      Month_A,</span>
-<span id="cb184-16"><a href="#cb184-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">levels =</span> month.name</span>
-<span id="cb184-17"><a href="#cb184-17" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb184-18"><a href="#cb184-18" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb184-19"><a href="#cb184-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb184-20"><a href="#cb184-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot mean group size by month</span></span>
-<span id="cb184-21"><a href="#cb184-21" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(monthly_summary, <span class="fu">aes</span>(<span class="at">x =</span> Month_A, <span class="at">y =</span> mean_group_size)) <span class="sc">+</span></span>
-<span id="cb184-22"><a href="#cb184-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span></span>
-<span id="cb184-23"><a href="#cb184-23" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_errorbar</span>(</span>
-<span id="cb184-24"><a href="#cb184-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
-<span id="cb184-25"><a href="#cb184-25" aria-hidden="true" tabindex="-1"></a>      <span class="at">ymin =</span> mean_group_size <span class="sc">-</span> se_group_size,</span>
-<span id="cb184-26"><a href="#cb184-26" aria-hidden="true" tabindex="-1"></a>      <span class="at">ymax =</span> mean_group_size <span class="sc">+</span> se_group_size</span>
-<span id="cb184-27"><a href="#cb184-27" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb184-28"><a href="#cb184-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">width =</span> <span class="fl">0.2</span></span>
-<span id="cb184-29"><a href="#cb184-29" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb184-30"><a href="#cb184-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb184-31"><a href="#cb184-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Month"</span>,</span>
-<span id="cb184-32"><a href="#cb184-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Mean Group Size"</span>,</span>
-<span id="cb184-33"><a href="#cb184-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Mean Killer Whale Group Size by Month"</span></span>
-<span id="cb184-34"><a href="#cb184-34" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb184-35"><a href="#cb184-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span> </span>
-<span id="cb184-36"><a href="#cb184-36" aria-hidden="true" tabindex="-1"></a>   <span class="fu">theme</span>(</span>
-<span id="cb184-37"><a href="#cb184-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>),</span>
-<span id="cb184-38"><a href="#cb184-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
-<span id="cb184-39"><a href="#cb184-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
-<span id="cb184-40"><a href="#cb184-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>),</span>
-<span id="cb184-41"><a href="#cb184-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>)</span>
-<span id="cb184-42"><a href="#cb184-42" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -830,27 +786,78 @@ $ Season     &lt;chr&gt; "Spring", "Spring", "Spring", "Spring", "Spring", "Spri
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb185"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb185-1"><a href="#cb185-1" aria-hidden="true" tabindex="-1"></a><span class="co">#create a month variable</span></span>
-<span id="cb185-2"><a href="#cb185-2" aria-hidden="true" tabindex="-1"></a>prey_data <span class="ot">&lt;-</span> prey_data <span class="sc">%&gt;%</span></span>
-<span id="cb185-3"><a href="#cb185-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb185-4"><a href="#cb185-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">Month_A =</span> <span class="fu">month</span>(<span class="st">`</span><span class="at">Date (Mo/Dy/Yr)</span><span class="st">`</span>, <span class="at">label =</span> <span class="cn">TRUE</span>, <span class="at">abbr =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb185-5"><a href="#cb185-5" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb185-6"><a href="#cb185-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb185-7"><a href="#cb185-7" aria-hidden="true" tabindex="-1"></a>prey_data <span class="ot">&lt;-</span> prey_data <span class="sc">%&gt;%</span></span>
-<span id="cb185-8"><a href="#cb185-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb185-9"><a href="#cb185-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Prey Species</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">str_to_title</span>(<span class="st">`</span><span class="at">Prey Species</span><span class="st">`</span>)</span>
-<span id="cb185-10"><a href="#cb185-10" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb185-11"><a href="#cb185-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb185-12"><a href="#cb185-12" aria-hidden="true" tabindex="-1"></a>prey_data <span class="ot">&lt;-</span> prey_data <span class="sc">%&gt;%</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb185"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb185-1"><a href="#cb185-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate monthly mean group size</span></span>
+<span id="cb185-2"><a href="#cb185-2" aria-hidden="true" tabindex="-1"></a>monthly_summary <span class="ot">&lt;-</span> killer_whales <span class="sc">%&gt;%</span></span>
+<span id="cb185-3"><a href="#cb185-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Month_A) <span class="sc">%&gt;%</span></span>
+<span id="cb185-4"><a href="#cb185-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb185-5"><a href="#cb185-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_group_size =</span> <span class="fu">mean</span>(Group_size, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb185-6"><a href="#cb185-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">sd_group_size =</span> <span class="fu">sd</span>(Group_size, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb185-7"><a href="#cb185-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_group =</span> <span class="fu">sum</span>(<span class="sc">!</span><span class="fu">is.na</span>(Group_size)),</span>
+<span id="cb185-8"><a href="#cb185-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">se_group_size =</span> sd_group_size <span class="sc">/</span> <span class="fu">sqrt</span>(n_group)</span>
+<span id="cb185-9"><a href="#cb185-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb185-10"><a href="#cb185-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb185-11"><a href="#cb185-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Put months in chronological order</span></span>
+<span id="cb185-12"><a href="#cb185-12" aria-hidden="true" tabindex="-1"></a>monthly_summary <span class="ot">&lt;-</span> monthly_summary <span class="sc">%&gt;%</span></span>
 <span id="cb185-13"><a href="#cb185-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb185-14"><a href="#cb185-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Prey Species</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">ifelse</span>(</span>
-<span id="cb185-15"><a href="#cb185-15" aria-hidden="true" tabindex="-1"></a>      <span class="st">`</span><span class="at">Prey Species</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"Habor Seal"</span>,</span>
-<span id="cb185-16"><a href="#cb185-16" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Harbor Seal"</span>,</span>
-<span id="cb185-17"><a href="#cb185-17" aria-hidden="true" tabindex="-1"></a>      <span class="st">`</span><span class="at">Prey Species</span><span class="st">`</span></span>
-<span id="cb185-18"><a href="#cb185-18" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb185-19"><a href="#cb185-19" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb185-20"><a href="#cb185-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb185-21"><a href="#cb185-21" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(prey_data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb185-14"><a href="#cb185-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">Month_A =</span> <span class="fu">factor</span>(</span>
+<span id="cb185-15"><a href="#cb185-15" aria-hidden="true" tabindex="-1"></a>      Month_A,</span>
+<span id="cb185-16"><a href="#cb185-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">levels =</span> month.name</span>
+<span id="cb185-17"><a href="#cb185-17" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb185-18"><a href="#cb185-18" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb185-19"><a href="#cb185-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb185-20"><a href="#cb185-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot mean group size by month</span></span>
+<span id="cb185-21"><a href="#cb185-21" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(monthly_summary, <span class="fu">aes</span>(<span class="at">x =</span> Month_A, <span class="at">y =</span> mean_group_size)) <span class="sc">+</span></span>
+<span id="cb185-22"><a href="#cb185-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span></span>
+<span id="cb185-23"><a href="#cb185-23" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_errorbar</span>(</span>
+<span id="cb185-24"><a href="#cb185-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
+<span id="cb185-25"><a href="#cb185-25" aria-hidden="true" tabindex="-1"></a>      <span class="at">ymin =</span> mean_group_size <span class="sc">-</span> se_group_size,</span>
+<span id="cb185-26"><a href="#cb185-26" aria-hidden="true" tabindex="-1"></a>      <span class="at">ymax =</span> mean_group_size <span class="sc">+</span> se_group_size</span>
+<span id="cb185-27"><a href="#cb185-27" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb185-28"><a href="#cb185-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">width =</span> <span class="fl">0.2</span></span>
+<span id="cb185-29"><a href="#cb185-29" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb185-30"><a href="#cb185-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb185-31"><a href="#cb185-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Month"</span>,</span>
+<span id="cb185-32"><a href="#cb185-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Mean Group Size"</span>,</span>
+<span id="cb185-33"><a href="#cb185-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Mean Killer Whale Group Size by Month"</span></span>
+<span id="cb185-34"><a href="#cb185-34" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb185-35"><a href="#cb185-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span> </span>
+<span id="cb185-36"><a href="#cb185-36" aria-hidden="true" tabindex="-1"></a>   <span class="fu">theme</span>(</span>
+<span id="cb185-37"><a href="#cb185-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>),</span>
+<span id="cb185-38"><a href="#cb185-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
+<span id="cb185-39"><a href="#cb185-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
+<span id="cb185-40"><a href="#cb185-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>),</span>
+<span id="cb185-41"><a href="#cb185-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>)</span>
+<span id="cb185-42"><a href="#cb185-42" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="WS3_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb186"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb186-1"><a href="#cb186-1" aria-hidden="true" tabindex="-1"></a><span class="co">#create a month variable</span></span>
+<span id="cb186-2"><a href="#cb186-2" aria-hidden="true" tabindex="-1"></a>prey_data <span class="ot">&lt;-</span> prey_data <span class="sc">%&gt;%</span></span>
+<span id="cb186-3"><a href="#cb186-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb186-4"><a href="#cb186-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">Month_A =</span> <span class="fu">month</span>(<span class="st">`</span><span class="at">Date (Mo/Dy/Yr)</span><span class="st">`</span>, <span class="at">label =</span> <span class="cn">TRUE</span>, <span class="at">abbr =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb186-5"><a href="#cb186-5" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb186-6"><a href="#cb186-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb186-7"><a href="#cb186-7" aria-hidden="true" tabindex="-1"></a>prey_data <span class="ot">&lt;-</span> prey_data <span class="sc">%&gt;%</span></span>
+<span id="cb186-8"><a href="#cb186-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb186-9"><a href="#cb186-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Prey Species</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">str_to_title</span>(<span class="st">`</span><span class="at">Prey Species</span><span class="st">`</span>)</span>
+<span id="cb186-10"><a href="#cb186-10" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb186-11"><a href="#cb186-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb186-12"><a href="#cb186-12" aria-hidden="true" tabindex="-1"></a>prey_data <span class="ot">&lt;-</span> prey_data <span class="sc">%&gt;%</span></span>
+<span id="cb186-13"><a href="#cb186-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb186-14"><a href="#cb186-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Prey Species</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">ifelse</span>(</span>
+<span id="cb186-15"><a href="#cb186-15" aria-hidden="true" tabindex="-1"></a>      <span class="st">`</span><span class="at">Prey Species</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"Habor Seal"</span>,</span>
+<span id="cb186-16"><a href="#cb186-16" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Harbor Seal"</span>,</span>
+<span id="cb186-17"><a href="#cb186-17" aria-hidden="true" tabindex="-1"></a>      <span class="st">`</span><span class="at">Prey Species</span><span class="st">`</span></span>
+<span id="cb186-18"><a href="#cb186-18" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb186-19"><a href="#cb186-19" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb186-20"><a href="#cb186-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb186-21"><a href="#cb186-21" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(prey_data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 10
   Encounter `Date (Mo/Dy/Yr)`   `Time (24hr)` `Decimal Latitude`
@@ -866,56 +873,56 @@ $ Season     &lt;chr&gt; "Spring", "Spring", "Spring", "Spring", "Spring", "Spri
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb187"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb187-1"><a href="#cb187-1" aria-hidden="true" tabindex="-1"></a><span class="co">#count prey abundance by month</span></span>
-<span id="cb187-2"><a href="#cb187-2" aria-hidden="true" tabindex="-1"></a>prey_monthly <span class="ot">&lt;-</span> prey_data <span class="sc">%&gt;%</span></span>
-<span id="cb187-3"><a href="#cb187-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
-<span id="cb187-4"><a href="#cb187-4" aria-hidden="true" tabindex="-1"></a>    <span class="sc">!</span><span class="fu">is.na</span>(<span class="st">`</span><span class="at">Prey Species</span><span class="st">`</span>),</span>
-<span id="cb187-5"><a href="#cb187-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Prey Species</span><span class="st">`</span> <span class="sc">!=</span> <span class="st">"N/A"</span></span>
-<span id="cb187-6"><a href="#cb187-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb187-7"><a href="#cb187-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Month_A, <span class="st">`</span><span class="at">Prey Species</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb187-8"><a href="#cb187-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb187-9"><a href="#cb187-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">occurrences =</span> <span class="fu">n</span>(),</span>
-<span id="cb187-10"><a href="#cb187-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span></span>
-<span id="cb187-11"><a href="#cb187-11" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb187-12"><a href="#cb187-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb187-13"><a href="#cb187-13" aria-hidden="true" tabindex="-1"></a><span class="co">#put months in order</span></span>
-<span id="cb187-14"><a href="#cb187-14" aria-hidden="true" tabindex="-1"></a>prey_monthly <span class="ot">&lt;-</span> prey_monthly <span class="sc">%&gt;%</span></span>
-<span id="cb187-15"><a href="#cb187-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb187-16"><a href="#cb187-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">Month_A =</span> <span class="fu">factor</span>(</span>
-<span id="cb187-17"><a href="#cb187-17" aria-hidden="true" tabindex="-1"></a>      Month_A,</span>
-<span id="cb187-18"><a href="#cb187-18" aria-hidden="true" tabindex="-1"></a>      <span class="at">levels =</span> month.name</span>
-<span id="cb187-19"><a href="#cb187-19" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb187-20"><a href="#cb187-20" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb187-21"><a href="#cb187-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb187-22"><a href="#cb187-22" aria-hidden="true" tabindex="-1"></a>prey_data <span class="ot">&lt;-</span> prey_data <span class="sc">%&gt;%</span></span>
-<span id="cb187-23"><a href="#cb187-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb187-24"><a href="#cb187-24" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Prey Species</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">case_when</span>(</span>
-<span id="cb187-25"><a href="#cb187-25" aria-hidden="true" tabindex="-1"></a>      <span class="st">`</span><span class="at">Prey Species</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"California Sea Lion"</span> <span class="sc">~</span> <span class="st">"California sea lion"</span>,</span>
-<span id="cb187-26"><a href="#cb187-26" aria-hidden="true" tabindex="-1"></a>      <span class="st">`</span><span class="at">Prey Species</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"Common Dolphin"</span> <span class="sc">~</span> <span class="st">"Common dolphin"</span>,</span>
-<span id="cb187-27"><a href="#cb187-27" aria-hidden="true" tabindex="-1"></a>      <span class="st">`</span><span class="at">Prey Species</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"Gray Whale Calf"</span> <span class="sc">~</span> <span class="st">"Grey whale calf"</span>,</span>
-<span id="cb187-28"><a href="#cb187-28" aria-hidden="true" tabindex="-1"></a>      <span class="st">`</span><span class="at">Prey Species</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"Harbor Porpoise"</span> <span class="sc">~</span> <span class="st">"Harbour porpoise"</span>,</span>
-<span id="cb187-29"><a href="#cb187-29" aria-hidden="true" tabindex="-1"></a>      <span class="st">`</span><span class="at">Prey Species</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"Harbor Seal"</span> <span class="sc">~</span> <span class="st">"Harbour seal"</span>,</span>
-<span id="cb187-30"><a href="#cb187-30" aria-hidden="true" tabindex="-1"></a>      <span class="st">`</span><span class="at">Prey Species</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"Northern Elephant Seal"</span> <span class="sc">~</span> <span class="st">"Northern elephant seal"</span>,</span>
-<span id="cb187-31"><a href="#cb187-31" aria-hidden="true" tabindex="-1"></a>      <span class="st">`</span><span class="at">Prey Species</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"Pacific White-Sided Dolphin"</span> <span class="sc">~</span> <span class="st">"Pacific white-sided dolphin"</span>,</span>
-<span id="cb187-32"><a href="#cb187-32" aria-hidden="true" tabindex="-1"></a>      <span class="st">`</span><span class="at">Prey Species</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"Minke Whale"</span> <span class="sc">~</span> <span class="st">"Minke whale"</span>,</span>
-<span id="cb187-33"><a href="#cb187-33" aria-hidden="true" tabindex="-1"></a>      <span class="st">`</span><span class="at">Prey Species</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"Dall's Porpoise"</span> <span class="sc">~</span> <span class="st">"Dall's porpoise"</span>,</span>
-<span id="cb187-34"><a href="#cb187-34" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">`</span><span class="at">Prey Species</span><span class="st">`</span></span>
-<span id="cb187-35"><a href="#cb187-35" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb187-36"><a href="#cb187-36" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb187-37"><a href="#cb187-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb187-38"><a href="#cb187-38" aria-hidden="true" tabindex="-1"></a>prey_monthly <span class="ot">&lt;-</span> prey_data <span class="sc">%&gt;%</span></span>
-<span id="cb187-39"><a href="#cb187-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
-<span id="cb187-40"><a href="#cb187-40" aria-hidden="true" tabindex="-1"></a>    <span class="sc">!</span><span class="fu">is.na</span>(<span class="st">`</span><span class="at">Prey Species</span><span class="st">`</span>),</span>
-<span id="cb187-41"><a href="#cb187-41" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Prey Species</span><span class="st">`</span> <span class="sc">!=</span> <span class="st">"N/A"</span>,</span>
-<span id="cb187-42"><a href="#cb187-42" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Prey Species</span><span class="st">`</span> <span class="sc">!=</span> <span class="st">"Unk"</span></span>
-<span id="cb187-43"><a href="#cb187-43" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb187-44"><a href="#cb187-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Month_A, <span class="st">`</span><span class="at">Prey Species</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb187-45"><a href="#cb187-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb187-46"><a href="#cb187-46" aria-hidden="true" tabindex="-1"></a>    <span class="at">occurrences =</span> <span class="fu">n</span>(),</span>
-<span id="cb187-47"><a href="#cb187-47" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span></span>
-<span id="cb187-48"><a href="#cb187-48" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb187-49"><a href="#cb187-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb187-50"><a href="#cb187-50" aria-hidden="true" tabindex="-1"></a>prey_monthly</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb188"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb188-1"><a href="#cb188-1" aria-hidden="true" tabindex="-1"></a><span class="co">#count prey abundance by month</span></span>
+<span id="cb188-2"><a href="#cb188-2" aria-hidden="true" tabindex="-1"></a>prey_monthly <span class="ot">&lt;-</span> prey_data <span class="sc">%&gt;%</span></span>
+<span id="cb188-3"><a href="#cb188-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
+<span id="cb188-4"><a href="#cb188-4" aria-hidden="true" tabindex="-1"></a>    <span class="sc">!</span><span class="fu">is.na</span>(<span class="st">`</span><span class="at">Prey Species</span><span class="st">`</span>),</span>
+<span id="cb188-5"><a href="#cb188-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Prey Species</span><span class="st">`</span> <span class="sc">!=</span> <span class="st">"N/A"</span></span>
+<span id="cb188-6"><a href="#cb188-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb188-7"><a href="#cb188-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Month_A, <span class="st">`</span><span class="at">Prey Species</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb188-8"><a href="#cb188-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb188-9"><a href="#cb188-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">occurrences =</span> <span class="fu">n</span>(),</span>
+<span id="cb188-10"><a href="#cb188-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span></span>
+<span id="cb188-11"><a href="#cb188-11" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb188-12"><a href="#cb188-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb188-13"><a href="#cb188-13" aria-hidden="true" tabindex="-1"></a><span class="co">#put months in order</span></span>
+<span id="cb188-14"><a href="#cb188-14" aria-hidden="true" tabindex="-1"></a>prey_monthly <span class="ot">&lt;-</span> prey_monthly <span class="sc">%&gt;%</span></span>
+<span id="cb188-15"><a href="#cb188-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb188-16"><a href="#cb188-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">Month_A =</span> <span class="fu">factor</span>(</span>
+<span id="cb188-17"><a href="#cb188-17" aria-hidden="true" tabindex="-1"></a>      Month_A,</span>
+<span id="cb188-18"><a href="#cb188-18" aria-hidden="true" tabindex="-1"></a>      <span class="at">levels =</span> month.name</span>
+<span id="cb188-19"><a href="#cb188-19" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb188-20"><a href="#cb188-20" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb188-21"><a href="#cb188-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb188-22"><a href="#cb188-22" aria-hidden="true" tabindex="-1"></a>prey_data <span class="ot">&lt;-</span> prey_data <span class="sc">%&gt;%</span></span>
+<span id="cb188-23"><a href="#cb188-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb188-24"><a href="#cb188-24" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Prey Species</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">case_when</span>(</span>
+<span id="cb188-25"><a href="#cb188-25" aria-hidden="true" tabindex="-1"></a>      <span class="st">`</span><span class="at">Prey Species</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"California Sea Lion"</span> <span class="sc">~</span> <span class="st">"California sea lion"</span>,</span>
+<span id="cb188-26"><a href="#cb188-26" aria-hidden="true" tabindex="-1"></a>      <span class="st">`</span><span class="at">Prey Species</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"Common Dolphin"</span> <span class="sc">~</span> <span class="st">"Common dolphin"</span>,</span>
+<span id="cb188-27"><a href="#cb188-27" aria-hidden="true" tabindex="-1"></a>      <span class="st">`</span><span class="at">Prey Species</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"Gray Whale Calf"</span> <span class="sc">~</span> <span class="st">"Grey whale calf"</span>,</span>
+<span id="cb188-28"><a href="#cb188-28" aria-hidden="true" tabindex="-1"></a>      <span class="st">`</span><span class="at">Prey Species</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"Harbor Porpoise"</span> <span class="sc">~</span> <span class="st">"Harbour porpoise"</span>,</span>
+<span id="cb188-29"><a href="#cb188-29" aria-hidden="true" tabindex="-1"></a>      <span class="st">`</span><span class="at">Prey Species</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"Harbor Seal"</span> <span class="sc">~</span> <span class="st">"Harbour seal"</span>,</span>
+<span id="cb188-30"><a href="#cb188-30" aria-hidden="true" tabindex="-1"></a>      <span class="st">`</span><span class="at">Prey Species</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"Northern Elephant Seal"</span> <span class="sc">~</span> <span class="st">"Northern elephant seal"</span>,</span>
+<span id="cb188-31"><a href="#cb188-31" aria-hidden="true" tabindex="-1"></a>      <span class="st">`</span><span class="at">Prey Species</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"Pacific White-Sided Dolphin"</span> <span class="sc">~</span> <span class="st">"Pacific white-sided dolphin"</span>,</span>
+<span id="cb188-32"><a href="#cb188-32" aria-hidden="true" tabindex="-1"></a>      <span class="st">`</span><span class="at">Prey Species</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"Minke Whale"</span> <span class="sc">~</span> <span class="st">"Minke whale"</span>,</span>
+<span id="cb188-33"><a href="#cb188-33" aria-hidden="true" tabindex="-1"></a>      <span class="st">`</span><span class="at">Prey Species</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"Dall's Porpoise"</span> <span class="sc">~</span> <span class="st">"Dall's porpoise"</span>,</span>
+<span id="cb188-34"><a href="#cb188-34" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">`</span><span class="at">Prey Species</span><span class="st">`</span></span>
+<span id="cb188-35"><a href="#cb188-35" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb188-36"><a href="#cb188-36" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb188-37"><a href="#cb188-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb188-38"><a href="#cb188-38" aria-hidden="true" tabindex="-1"></a>prey_monthly <span class="ot">&lt;-</span> prey_data <span class="sc">%&gt;%</span></span>
+<span id="cb188-39"><a href="#cb188-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
+<span id="cb188-40"><a href="#cb188-40" aria-hidden="true" tabindex="-1"></a>    <span class="sc">!</span><span class="fu">is.na</span>(<span class="st">`</span><span class="at">Prey Species</span><span class="st">`</span>),</span>
+<span id="cb188-41"><a href="#cb188-41" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Prey Species</span><span class="st">`</span> <span class="sc">!=</span> <span class="st">"N/A"</span>,</span>
+<span id="cb188-42"><a href="#cb188-42" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Prey Species</span><span class="st">`</span> <span class="sc">!=</span> <span class="st">"Unk"</span></span>
+<span id="cb188-43"><a href="#cb188-43" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb188-44"><a href="#cb188-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Month_A, <span class="st">`</span><span class="at">Prey Species</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb188-45"><a href="#cb188-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb188-46"><a href="#cb188-46" aria-hidden="true" tabindex="-1"></a>    <span class="at">occurrences =</span> <span class="fu">n</span>(),</span>
+<span id="cb188-47"><a href="#cb188-47" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span></span>
+<span id="cb188-48"><a href="#cb188-48" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb188-49"><a href="#cb188-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb188-50"><a href="#cb188-50" aria-hidden="true" tabindex="-1"></a>prey_monthly</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 24 × 3
    Month_A `Prey Species`      occurrences
@@ -934,154 +941,154 @@ $ Season     &lt;chr&gt; "Spring", "Spring", "Spring", "Spring", "Spring", "Spri
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb189"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb189-1"><a href="#cb189-1" aria-hidden="true" tabindex="-1"></a><span class="co"># make plot</span></span>
-<span id="cb189-2"><a href="#cb189-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(prey_monthly, <span class="fu">aes</span>(<span class="at">x =</span> Month_A, <span class="at">y =</span> occurrences, <span class="at">fill =</span> <span class="st">`</span><span class="at">Prey Species</span><span class="st">`</span>)) <span class="sc">+</span></span>
-<span id="cb189-3"><a href="#cb189-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">position =</span> <span class="st">"dodge"</span>) <span class="sc">+</span></span>
-<span id="cb189-4"><a href="#cb189-4" aria-hidden="true" tabindex="-1"></a>   <span class="fu">scale_fill_manual</span>(</span>
-<span id="cb189-5"><a href="#cb189-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">values =</span> <span class="fu">c</span>(</span>
-<span id="cb189-6"><a href="#cb189-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"#08306B"</span>,</span>
-<span id="cb189-7"><a href="#cb189-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"#2171B5"</span>,</span>
-<span id="cb189-8"><a href="#cb189-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"#4292C6"</span>,</span>
-<span id="cb189-9"><a href="#cb189-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"#6BAED6"</span>,</span>
-<span id="cb189-10"><a href="#cb189-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"#9ECAE1"</span>,</span>
-<span id="cb189-11"><a href="#cb189-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">"#C6DBEF"</span>,</span>
-<span id="cb189-12"><a href="#cb189-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"#DEEBF7"</span>,</span>
-<span id="cb189-13"><a href="#cb189-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"#4D4D4D"</span>,</span>
-<span id="cb189-14"><a href="#cb189-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"#969696"</span>,</span>
-<span id="cb189-15"><a href="#cb189-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">"#BDBDBD"</span>,</span>
-<span id="cb189-16"><a href="#cb189-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">"#D9D9D9"</span></span>
-<span id="cb189-17"><a href="#cb189-17" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb189-18"><a href="#cb189-18" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb189-19"><a href="#cb189-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb189-20"><a href="#cb189-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Month"</span>,</span>
-<span id="cb189-21"><a href="#cb189-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Number of Prey Occurrences"</span>,</span>
-<span id="cb189-22"><a href="#cb189-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Killer Whale Prey Abundance by Month"</span>,</span>
-<span id="cb189-23"><a href="#cb189-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"Prey Species"</span></span>
-<span id="cb189-24"><a href="#cb189-24" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb189-25"><a href="#cb189-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
-<span id="cb189-26"><a href="#cb189-26" aria-hidden="true" tabindex="-1"></a> <span class="fu">theme</span>(</span>
-<span id="cb189-27"><a href="#cb189-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>),</span>
-<span id="cb189-28"><a href="#cb189-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
-<span id="cb189-29"><a href="#cb189-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
-<span id="cb189-30"><a href="#cb189-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>),</span>
-<span id="cb189-31"><a href="#cb189-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>)</span>
-<span id="cb189-32"><a href="#cb189-32" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb190"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb190-1"><a href="#cb190-1" aria-hidden="true" tabindex="-1"></a><span class="co"># make plot</span></span>
+<span id="cb190-2"><a href="#cb190-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(prey_monthly, <span class="fu">aes</span>(<span class="at">x =</span> Month_A, <span class="at">y =</span> occurrences, <span class="at">fill =</span> <span class="st">`</span><span class="at">Prey Species</span><span class="st">`</span>)) <span class="sc">+</span></span>
+<span id="cb190-3"><a href="#cb190-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">position =</span> <span class="st">"dodge"</span>) <span class="sc">+</span></span>
+<span id="cb190-4"><a href="#cb190-4" aria-hidden="true" tabindex="-1"></a>   <span class="fu">scale_fill_manual</span>(</span>
+<span id="cb190-5"><a href="#cb190-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">values =</span> <span class="fu">c</span>(</span>
+<span id="cb190-6"><a href="#cb190-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"#08306B"</span>,</span>
+<span id="cb190-7"><a href="#cb190-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"#2171B5"</span>,</span>
+<span id="cb190-8"><a href="#cb190-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"#4292C6"</span>,</span>
+<span id="cb190-9"><a href="#cb190-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"#6BAED6"</span>,</span>
+<span id="cb190-10"><a href="#cb190-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"#9ECAE1"</span>,</span>
+<span id="cb190-11"><a href="#cb190-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">"#C6DBEF"</span>,</span>
+<span id="cb190-12"><a href="#cb190-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"#DEEBF7"</span>,</span>
+<span id="cb190-13"><a href="#cb190-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"#4D4D4D"</span>,</span>
+<span id="cb190-14"><a href="#cb190-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"#969696"</span>,</span>
+<span id="cb190-15"><a href="#cb190-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">"#BDBDBD"</span>,</span>
+<span id="cb190-16"><a href="#cb190-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">"#D9D9D9"</span></span>
+<span id="cb190-17"><a href="#cb190-17" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb190-18"><a href="#cb190-18" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb190-19"><a href="#cb190-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb190-20"><a href="#cb190-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Month"</span>,</span>
+<span id="cb190-21"><a href="#cb190-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Number of Prey Occurrences"</span>,</span>
+<span id="cb190-22"><a href="#cb190-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Killer Whale Prey Abundance by Month"</span>,</span>
+<span id="cb190-23"><a href="#cb190-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"Prey Species"</span></span>
+<span id="cb190-24"><a href="#cb190-24" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb190-25"><a href="#cb190-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb190-26"><a href="#cb190-26" aria-hidden="true" tabindex="-1"></a> <span class="fu">theme</span>(</span>
+<span id="cb190-27"><a href="#cb190-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>),</span>
+<span id="cb190-28"><a href="#cb190-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
+<span id="cb190-29"><a href="#cb190-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
+<span id="cb190-30"><a href="#cb190-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>),</span>
+<span id="cb190-31"><a href="#cb190-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>)</span>
+<span id="cb190-32"><a href="#cb190-32" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="WS3_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="WS3_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb190"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb190-1"><a href="#cb190-1" aria-hidden="true" tabindex="-1"></a><span class="co">#add image</span></span>
-<span id="cb190-2"><a href="#cb190-2" aria-hidden="true" tabindex="-1"></a>prey_image <span class="ot">&lt;-</span> <span class="fu">rasterGrob</span>(</span>
-<span id="cb190-3"><a href="#cb190-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">readPNG</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"docs"</span>, <span class="st">"WS3_Pic.png"</span>)),</span>
-<span id="cb190-4"><a href="#cb190-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">interpolate =</span> <span class="cn">TRUE</span></span>
-<span id="cb190-5"><a href="#cb190-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb191"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb191-1"><a href="#cb191-1" aria-hidden="true" tabindex="-1"></a><span class="co">#add image</span></span>
+<span id="cb191-2"><a href="#cb191-2" aria-hidden="true" tabindex="-1"></a>prey_image <span class="ot">&lt;-</span> <span class="fu">rasterGrob</span>(</span>
+<span id="cb191-3"><a href="#cb191-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">readPNG</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"docs"</span>, <span class="st">"WS3_Pic.png"</span>)),</span>
+<span id="cb191-4"><a href="#cb191-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">interpolate =</span> <span class="cn">TRUE</span></span>
+<span id="cb191-5"><a href="#cb191-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb191"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb191-1"><a href="#cb191-1" aria-hidden="true" tabindex="-1"></a><span class="co">#save graphs as objects</span></span>
-<span id="cb191-2"><a href="#cb191-2" aria-hidden="true" tabindex="-1"></a>plot1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(monthly_occurrences, <span class="fu">aes</span>(<span class="at">x =</span> Month_A, <span class="at">y =</span> occurrences)) <span class="sc">+</span></span>
-<span id="cb191-3"><a href="#cb191-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"lightblue"</span>) <span class="sc">+</span></span>
-<span id="cb191-4"><a href="#cb191-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb191-5"><a href="#cb191-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Month"</span>,</span>
-<span id="cb191-6"><a href="#cb191-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Number of Occurrences"</span>,</span>
-<span id="cb191-7"><a href="#cb191-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Killer Whale Occurrences by Month"</span></span>
-<span id="cb191-8"><a href="#cb191-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb191-9"><a href="#cb191-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span> </span>
-<span id="cb191-10"><a href="#cb191-10" aria-hidden="true" tabindex="-1"></a>   <span class="fu">theme</span>(</span>
-<span id="cb191-11"><a href="#cb191-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>),</span>
-<span id="cb191-12"><a href="#cb191-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
-<span id="cb191-13"><a href="#cb191-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
-<span id="cb191-14"><a href="#cb191-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>),</span>
-<span id="cb191-15"><a href="#cb191-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>)</span>
-<span id="cb191-16"><a href="#cb191-16" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb191-17"><a href="#cb191-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb191-18"><a href="#cb191-18" aria-hidden="true" tabindex="-1"></a>plot2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(monthly_summary, <span class="fu">aes</span>(<span class="at">x =</span> Month_A, <span class="at">y =</span> mean_group_size)) <span class="sc">+</span></span>
-<span id="cb191-19"><a href="#cb191-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span></span>
-<span id="cb191-20"><a href="#cb191-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(</span>
-<span id="cb191-21"><a href="#cb191-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
-<span id="cb191-22"><a href="#cb191-22" aria-hidden="true" tabindex="-1"></a>      <span class="at">ymin =</span> mean_group_size <span class="sc">-</span> se_group_size,</span>
-<span id="cb191-23"><a href="#cb191-23" aria-hidden="true" tabindex="-1"></a>      <span class="at">ymax =</span> mean_group_size <span class="sc">+</span> se_group_size</span>
-<span id="cb191-24"><a href="#cb191-24" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb191-25"><a href="#cb191-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">width =</span> <span class="fl">0.2</span></span>
-<span id="cb191-26"><a href="#cb191-26" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb191-27"><a href="#cb191-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb191-28"><a href="#cb191-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Month"</span>,</span>
-<span id="cb191-29"><a href="#cb191-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Mean Group Size"</span>,</span>
-<span id="cb191-30"><a href="#cb191-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Mean Killer Whale Group Size by Month"</span></span>
-<span id="cb191-31"><a href="#cb191-31" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb191-32"><a href="#cb191-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span> </span>
-<span id="cb191-33"><a href="#cb191-33" aria-hidden="true" tabindex="-1"></a>   <span class="fu">theme</span>(</span>
-<span id="cb191-34"><a href="#cb191-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>),</span>
-<span id="cb191-35"><a href="#cb191-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
-<span id="cb191-36"><a href="#cb191-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
-<span id="cb191-37"><a href="#cb191-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>),</span>
-<span id="cb191-38"><a href="#cb191-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>)</span>
-<span id="cb191-39"><a href="#cb191-39" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb191-40"><a href="#cb191-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb191-41"><a href="#cb191-41" aria-hidden="true" tabindex="-1"></a>plot3 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(prey_monthly, <span class="fu">aes</span>(<span class="at">x =</span> Month_A, <span class="at">y =</span> occurrences, <span class="at">fill =</span> <span class="st">`</span><span class="at">Prey Species</span><span class="st">`</span>)) <span class="sc">+</span></span>
-<span id="cb191-42"><a href="#cb191-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">position =</span> <span class="st">"dodge"</span>) <span class="sc">+</span></span>
-<span id="cb191-43"><a href="#cb191-43" aria-hidden="true" tabindex="-1"></a>   <span class="fu">scale_fill_manual</span>(</span>
-<span id="cb191-44"><a href="#cb191-44" aria-hidden="true" tabindex="-1"></a>    <span class="at">values =</span> <span class="fu">c</span>(</span>
-<span id="cb191-45"><a href="#cb191-45" aria-hidden="true" tabindex="-1"></a>    <span class="st">"#08306B"</span>,</span>
-<span id="cb191-46"><a href="#cb191-46" aria-hidden="true" tabindex="-1"></a>    <span class="st">"#2171B5"</span>,</span>
-<span id="cb191-47"><a href="#cb191-47" aria-hidden="true" tabindex="-1"></a>    <span class="st">"#4292C6"</span>,</span>
-<span id="cb191-48"><a href="#cb191-48" aria-hidden="true" tabindex="-1"></a>    <span class="st">"#6BAED6"</span>,</span>
-<span id="cb191-49"><a href="#cb191-49" aria-hidden="true" tabindex="-1"></a>    <span class="st">"#9ECAE1"</span>,</span>
-<span id="cb191-50"><a href="#cb191-50" aria-hidden="true" tabindex="-1"></a>    <span class="st">"#C6DBEF"</span>,</span>
-<span id="cb191-51"><a href="#cb191-51" aria-hidden="true" tabindex="-1"></a>    <span class="st">"#DEEBF7"</span>,</span>
-<span id="cb191-52"><a href="#cb191-52" aria-hidden="true" tabindex="-1"></a>    <span class="st">"#4D4D4D"</span>,</span>
-<span id="cb191-53"><a href="#cb191-53" aria-hidden="true" tabindex="-1"></a>    <span class="st">"#969696"</span>,</span>
-<span id="cb191-54"><a href="#cb191-54" aria-hidden="true" tabindex="-1"></a>    <span class="st">"#BDBDBD"</span>,</span>
-<span id="cb191-55"><a href="#cb191-55" aria-hidden="true" tabindex="-1"></a>    <span class="st">"#D9D9D9"</span></span>
-<span id="cb191-56"><a href="#cb191-56" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb191-57"><a href="#cb191-57" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb191-58"><a href="#cb191-58" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb191-59"><a href="#cb191-59" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Month"</span>,</span>
-<span id="cb191-60"><a href="#cb191-60" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Number of Prey Occurrences"</span>,</span>
-<span id="cb191-61"><a href="#cb191-61" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Killer Whale Prey Abundance by Month"</span>,</span>
-<span id="cb191-62"><a href="#cb191-62" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"Prey Species"</span></span>
-<span id="cb191-63"><a href="#cb191-63" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb191-64"><a href="#cb191-64" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
-<span id="cb191-65"><a href="#cb191-65" aria-hidden="true" tabindex="-1"></a>   <span class="fu">theme</span>(</span>
-<span id="cb191-66"><a href="#cb191-66" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>),</span>
-<span id="cb191-67"><a href="#cb191-67" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
-<span id="cb191-68"><a href="#cb191-68" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
-<span id="cb191-69"><a href="#cb191-69" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>),</span>
-<span id="cb191-70"><a href="#cb191-70" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>)</span>
-<span id="cb191-71"><a href="#cb191-71" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb191-72"><a href="#cb191-72" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb191-73"><a href="#cb191-73" aria-hidden="true" tabindex="-1"></a>plot4 <span class="ot">&lt;-</span> <span class="fu">wrap_elements</span>(prey_image)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb192"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb192-1"><a href="#cb192-1" aria-hidden="true" tabindex="-1"></a><span class="co">#save graphs as objects</span></span>
+<span id="cb192-2"><a href="#cb192-2" aria-hidden="true" tabindex="-1"></a>plot1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(monthly_occurrences, <span class="fu">aes</span>(<span class="at">x =</span> Month_A, <span class="at">y =</span> occurrences)) <span class="sc">+</span></span>
+<span id="cb192-3"><a href="#cb192-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"lightblue"</span>) <span class="sc">+</span></span>
+<span id="cb192-4"><a href="#cb192-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb192-5"><a href="#cb192-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Month"</span>,</span>
+<span id="cb192-6"><a href="#cb192-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Number of Occurrences"</span>,</span>
+<span id="cb192-7"><a href="#cb192-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Killer Whale Occurrences by Month"</span></span>
+<span id="cb192-8"><a href="#cb192-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb192-9"><a href="#cb192-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span> </span>
+<span id="cb192-10"><a href="#cb192-10" aria-hidden="true" tabindex="-1"></a>   <span class="fu">theme</span>(</span>
+<span id="cb192-11"><a href="#cb192-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>),</span>
+<span id="cb192-12"><a href="#cb192-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
+<span id="cb192-13"><a href="#cb192-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
+<span id="cb192-14"><a href="#cb192-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>),</span>
+<span id="cb192-15"><a href="#cb192-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>)</span>
+<span id="cb192-16"><a href="#cb192-16" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb192-17"><a href="#cb192-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb192-18"><a href="#cb192-18" aria-hidden="true" tabindex="-1"></a>plot2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(monthly_summary, <span class="fu">aes</span>(<span class="at">x =</span> Month_A, <span class="at">y =</span> mean_group_size)) <span class="sc">+</span></span>
+<span id="cb192-19"><a href="#cb192-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span></span>
+<span id="cb192-20"><a href="#cb192-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(</span>
+<span id="cb192-21"><a href="#cb192-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
+<span id="cb192-22"><a href="#cb192-22" aria-hidden="true" tabindex="-1"></a>      <span class="at">ymin =</span> mean_group_size <span class="sc">-</span> se_group_size,</span>
+<span id="cb192-23"><a href="#cb192-23" aria-hidden="true" tabindex="-1"></a>      <span class="at">ymax =</span> mean_group_size <span class="sc">+</span> se_group_size</span>
+<span id="cb192-24"><a href="#cb192-24" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb192-25"><a href="#cb192-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">width =</span> <span class="fl">0.2</span></span>
+<span id="cb192-26"><a href="#cb192-26" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb192-27"><a href="#cb192-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb192-28"><a href="#cb192-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Month"</span>,</span>
+<span id="cb192-29"><a href="#cb192-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Mean Group Size"</span>,</span>
+<span id="cb192-30"><a href="#cb192-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Mean Killer Whale Group Size by Month"</span></span>
+<span id="cb192-31"><a href="#cb192-31" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb192-32"><a href="#cb192-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span> </span>
+<span id="cb192-33"><a href="#cb192-33" aria-hidden="true" tabindex="-1"></a>   <span class="fu">theme</span>(</span>
+<span id="cb192-34"><a href="#cb192-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>),</span>
+<span id="cb192-35"><a href="#cb192-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
+<span id="cb192-36"><a href="#cb192-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
+<span id="cb192-37"><a href="#cb192-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>),</span>
+<span id="cb192-38"><a href="#cb192-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>)</span>
+<span id="cb192-39"><a href="#cb192-39" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb192-40"><a href="#cb192-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb192-41"><a href="#cb192-41" aria-hidden="true" tabindex="-1"></a>plot3 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(prey_monthly, <span class="fu">aes</span>(<span class="at">x =</span> Month_A, <span class="at">y =</span> occurrences, <span class="at">fill =</span> <span class="st">`</span><span class="at">Prey Species</span><span class="st">`</span>)) <span class="sc">+</span></span>
+<span id="cb192-42"><a href="#cb192-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">position =</span> <span class="st">"dodge"</span>) <span class="sc">+</span></span>
+<span id="cb192-43"><a href="#cb192-43" aria-hidden="true" tabindex="-1"></a>   <span class="fu">scale_fill_manual</span>(</span>
+<span id="cb192-44"><a href="#cb192-44" aria-hidden="true" tabindex="-1"></a>    <span class="at">values =</span> <span class="fu">c</span>(</span>
+<span id="cb192-45"><a href="#cb192-45" aria-hidden="true" tabindex="-1"></a>    <span class="st">"#08306B"</span>,</span>
+<span id="cb192-46"><a href="#cb192-46" aria-hidden="true" tabindex="-1"></a>    <span class="st">"#2171B5"</span>,</span>
+<span id="cb192-47"><a href="#cb192-47" aria-hidden="true" tabindex="-1"></a>    <span class="st">"#4292C6"</span>,</span>
+<span id="cb192-48"><a href="#cb192-48" aria-hidden="true" tabindex="-1"></a>    <span class="st">"#6BAED6"</span>,</span>
+<span id="cb192-49"><a href="#cb192-49" aria-hidden="true" tabindex="-1"></a>    <span class="st">"#9ECAE1"</span>,</span>
+<span id="cb192-50"><a href="#cb192-50" aria-hidden="true" tabindex="-1"></a>    <span class="st">"#C6DBEF"</span>,</span>
+<span id="cb192-51"><a href="#cb192-51" aria-hidden="true" tabindex="-1"></a>    <span class="st">"#DEEBF7"</span>,</span>
+<span id="cb192-52"><a href="#cb192-52" aria-hidden="true" tabindex="-1"></a>    <span class="st">"#4D4D4D"</span>,</span>
+<span id="cb192-53"><a href="#cb192-53" aria-hidden="true" tabindex="-1"></a>    <span class="st">"#969696"</span>,</span>
+<span id="cb192-54"><a href="#cb192-54" aria-hidden="true" tabindex="-1"></a>    <span class="st">"#BDBDBD"</span>,</span>
+<span id="cb192-55"><a href="#cb192-55" aria-hidden="true" tabindex="-1"></a>    <span class="st">"#D9D9D9"</span></span>
+<span id="cb192-56"><a href="#cb192-56" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb192-57"><a href="#cb192-57" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb192-58"><a href="#cb192-58" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb192-59"><a href="#cb192-59" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Month"</span>,</span>
+<span id="cb192-60"><a href="#cb192-60" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Number of Prey Occurrences"</span>,</span>
+<span id="cb192-61"><a href="#cb192-61" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Killer Whale Prey Abundance by Month"</span>,</span>
+<span id="cb192-62"><a href="#cb192-62" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"Prey Species"</span></span>
+<span id="cb192-63"><a href="#cb192-63" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb192-64"><a href="#cb192-64" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb192-65"><a href="#cb192-65" aria-hidden="true" tabindex="-1"></a>   <span class="fu">theme</span>(</span>
+<span id="cb192-66"><a href="#cb192-66" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>),</span>
+<span id="cb192-67"><a href="#cb192-67" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
+<span id="cb192-68"><a href="#cb192-68" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
+<span id="cb192-69"><a href="#cb192-69" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>),</span>
+<span id="cb192-70"><a href="#cb192-70" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>)</span>
+<span id="cb192-71"><a href="#cb192-71" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb192-72"><a href="#cb192-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb192-73"><a href="#cb192-73" aria-hidden="true" tabindex="-1"></a>plot4 <span class="ot">&lt;-</span> <span class="fu">wrap_elements</span>(prey_image)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb192"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb192-1"><a href="#cb192-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create figure caption</span></span>
-<span id="cb192-2"><a href="#cb192-2" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-workshop3</span></span>
-<span id="cb192-3"><a href="#cb192-3" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: " Killer whale occurrences, mean group size, and prey abundance by month. The top left panel shows the number of killer whale occurrences by month. The top right panel shows the mean group size of killer whales by month with standard error bars. The bottom left panel shows the number of prey occurrences by month for each prey species."</span></span>
-<span id="cb192-4"><a href="#cb192-4" aria-hidden="true" tabindex="-1"></a><span class="co">#combine plots</span></span>
-<span id="cb192-5"><a href="#cb192-5" aria-hidden="true" tabindex="-1"></a>plot1 <span class="sc">/</span> plot2 <span class="sc">/</span> plot3 <span class="sc">/</span> plot4</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb193"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb193-1"><a href="#cb193-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create figure caption</span></span>
+<span id="cb193-2"><a href="#cb193-2" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-workshop3</span></span>
+<span id="cb193-3"><a href="#cb193-3" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: " Killer whale occurrences, mean group size, and prey abundance by month. The top left panel shows the number of killer whale occurrences by month. The top right panel shows the mean group size of killer whales by month with standard error bars. The bottom left panel shows the number of prey occurrences by month for each prey species."</span></span>
+<span id="cb193-4"><a href="#cb193-4" aria-hidden="true" tabindex="-1"></a><span class="co">#combine plots</span></span>
+<span id="cb193-5"><a href="#cb193-5" aria-hidden="true" tabindex="-1"></a>plot1 <span class="sc">/</span> plot2 <span class="sc">/</span> plot3 <span class="sc">/</span> plot4</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="WS3_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="WS3_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb193"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb193-1"><a href="#cb193-1" aria-hidden="true" tabindex="-1"></a><span class="co">#save final image</span></span>
-<span id="cb193-2"><a href="#cb193-2" aria-hidden="true" tabindex="-1"></a>final_plot <span class="ot">&lt;-</span> plot1 <span class="sc">/</span> plot2 <span class="sc">/</span> plot3 <span class="sc">/</span> plot4</span>
-<span id="cb193-3"><a href="#cb193-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb193-4"><a href="#cb193-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(</span>
-<span id="cb193-5"><a href="#cb193-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">filename =</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"docs"</span>, <span class="st">"Workshop3_Final_Plot.png"</span>),</span>
-<span id="cb193-6"><a href="#cb193-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">plot =</span> final_plot,</span>
-<span id="cb193-7"><a href="#cb193-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">width =</span> <span class="dv">14</span>,</span>
-<span id="cb193-8"><a href="#cb193-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">height =</span> <span class="dv">10</span>,</span>
-<span id="cb193-9"><a href="#cb193-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">units =</span> <span class="st">"in"</span>,</span>
-<span id="cb193-10"><a href="#cb193-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">dpi =</span> <span class="dv">300</span></span>
-<span id="cb193-11"><a href="#cb193-11" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb194"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb194-1"><a href="#cb194-1" aria-hidden="true" tabindex="-1"></a><span class="co">#save final image</span></span>
+<span id="cb194-2"><a href="#cb194-2" aria-hidden="true" tabindex="-1"></a>final_plot <span class="ot">&lt;-</span> plot1 <span class="sc">/</span> plot2 <span class="sc">/</span> plot3 <span class="sc">/</span> plot4</span>
+<span id="cb194-3"><a href="#cb194-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb194-4"><a href="#cb194-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(</span>
+<span id="cb194-5"><a href="#cb194-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">filename =</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"docs"</span>, <span class="st">"Workshop3_Final_Plot.png"</span>),</span>
+<span id="cb194-6"><a href="#cb194-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">plot =</span> final_plot,</span>
+<span id="cb194-7"><a href="#cb194-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">width =</span> <span class="dv">14</span>,</span>
+<span id="cb194-8"><a href="#cb194-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">height =</span> <span class="dv">10</span>,</span>
+<span id="cb194-9"><a href="#cb194-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">units =</span> <span class="st">"in"</span>,</span>
+<span id="cb194-10"><a href="#cb194-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">dpi =</span> <span class="dv">300</span></span>
+<span id="cb194-11"><a href="#cb194-11" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 
 </main>

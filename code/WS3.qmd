@@ -2,6 +2,9 @@
 title: "WS3"
 format: html
 editor: visual
+execute:
+  warning: false
+  message: false
 ---
 
 ```{r}
@@ -35,6 +38,17 @@ summary(prey_data)
 original_image <- rasterGrob(
   readPNG(here::here("outputs", "figures", "Graph_From_Source.png")),
   interpolate = TRUE
+)
+
+file.exists(here::here("outputs", "figures", "Graph_From_Source.png"))
+```
+```{r}
+#add image to qmd
+#| label: fig-original
+#| fig-cap: "Original graph from the source study."
+
+knitr::include_graphics(
+  here::here("outputs", "figures", "Graph_From_Source.png")
 )
 ```
 
