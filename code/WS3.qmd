@@ -30,6 +30,14 @@ names(prey_data)
 summary(prey_data)
 ```
 
+```{r}
+#add the original graph
+original_image <- rasterGrob(
+  readPNG(here::here("outputs", "figures", "Graph_From_Source.png")),
+  interpolate = TRUE
+)
+```
+
 
 ```{r}
 monthly_occurrences <- killer_whales %>%
