@@ -46,6 +46,8 @@ file.exists(here::here("outputs", "figures", "Graph_From_Source.PNG"))
 #add image to qmd
 #| label: fig-original
 #| fig-cap: "Original graph from the source study."
+#| #| fig-pos: "H"
+#| out-width: "80%"
 
 knitr::include_graphics(
   here::here("outputs", "figures", "Graph_From_Source.PNG")
@@ -359,14 +361,18 @@ plot4 <- wrap_elements(prey_image)
 # create figure caption
 #| label: fig-workshop3
 #| fig-cap: " Killer whale occurrences, mean group size, and prey abundance by month. The top left panel shows the number of killer whale occurrences by month. The top right panel shows the mean group size of killer whales by month with standard error bars. The bottom left panel shows the number of prey occurrences by month for each prey species."
+#| fig-width: 12
+#| fig-height: 18
+#| out-width: "100%"
+
 #combine plots
-plot1 / plot2 / plot3 / plot4
+final_plot <- plot1 / plot2 / plot3 / plot4
+
+final_plot
 ```
 
 ```{r}
 #save final image
-final_plot <- plot1 / plot2 / plot3 / plot4
-
 ggsave(
   filename = here::here("docs", "Workshop3_Final_Plot.png"),
   plot = final_plot,
