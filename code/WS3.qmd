@@ -5,6 +5,7 @@ editor: visual
 execute:
   warning: false
   message: false
+  output-file: ../WS3.html
 ---
 
 ```{r}
