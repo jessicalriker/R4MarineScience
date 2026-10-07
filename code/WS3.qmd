@@ -1,5 +1,5 @@
 ---
-title: "WS3"
+title: "WorkShop3"
 format: html
 editor: visual
 execute:
