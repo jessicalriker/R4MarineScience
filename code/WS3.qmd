@@ -43,15 +43,11 @@ original_image <- rasterGrob(
 file.exists(here::here("outputs", "figures", "Graph_From_Source.PNG"))
 ```
 ```{r}
-#add image to qmd
 #| label: fig-original
 #| fig-cap: "Original graph from the source study."
-#| #| fig-pos: "H"
 #| out-width: "80%"
 
-knitr::include_graphics(
-  here::here("outputs", "figures", "Graph_From_Source.PNG")
-)
+knitr::include_graphics("/Users/jess/Desktop/MB5370 - Techniques/Module2_info/R4MarineScience/code/Graph_From_Source.PNG")
 ```
 
 
@@ -233,6 +229,14 @@ prey_monthly <- prey_data %>%
   summarise(
     occurrences = n(),
     .groups = "drop"
+  ) %>%
+  complete(
+    Month_A = month.name,
+    `Prey Species`,
+    fill = list(occurrences = 0)
+  ) %>%
+  mutate(
+    Month_A = factor(Month_A, levels = month.name)
   )
 
 prey_monthly
@@ -265,11 +269,11 @@ ggplot(prey_monthly, aes(x = Month_A, y = occurrences, fill = `Prey Species`)) +
   ) +
   theme_classic() +
  theme(
-    axis.title = element_text(size = 14),
-    axis.text = element_text(size = 12),
-    legend.title = element_text(size = 12),
-    legend.text = element_text(size = 11),
-    plot.title = element_text(size = 16)
+    axis.title = element_text(size = 20),
+    axis.text = element_text(size = 14),
+    legend.title = element_text(size = 18),
+    legend.text = element_text(size = 17),
+    plot.title = element_text(size = 22)
   )
 ```
 
@@ -292,11 +296,11 @@ plot1 <- ggplot(monthly_occurrences, aes(x = Month_A, y = occurrences)) +
   ) +
   theme_classic() + 
    theme(
-    axis.title = element_text(size = 14),
-    axis.text = element_text(size = 12),
-    legend.title = element_text(size = 12),
-    legend.text = element_text(size = 11),
-    plot.title = element_text(size = 16)
+    axis.title = element_text(size = 20),
+    axis.text = element_text(size = 14),
+    legend.title = element_text(size = 18),
+    legend.text = element_text(size = 17),
+    plot.title = element_text(size = 22)
   )
 
 plot2 <- ggplot(monthly_summary, aes(x = Month_A, y = mean_group_size)) +
@@ -315,11 +319,11 @@ plot2 <- ggplot(monthly_summary, aes(x = Month_A, y = mean_group_size)) +
   ) +
   theme_classic() + 
    theme(
-    axis.title = element_text(size = 14),
-    axis.text = element_text(size = 12),
-    legend.title = element_text(size = 12),
-    legend.text = element_text(size = 11),
-    plot.title = element_text(size = 16)
+     axis.title = element_text(size = 20),
+    axis.text = element_text(size = 14),
+    legend.title = element_text(size = 18),
+    legend.text = element_text(size = 17),
+    plot.title = element_text(size = 22)
   )
 
 plot3 <- ggplot(prey_monthly, aes(x = Month_A, y = occurrences, fill = `Prey Species`)) +
@@ -347,22 +351,21 @@ plot3 <- ggplot(prey_monthly, aes(x = Month_A, y = occurrences, fill = `Prey Spe
   ) +
   theme_classic() +
    theme(
-    axis.title = element_text(size = 14),
-    axis.text = element_text(size = 12),
-    legend.title = element_text(size = 12),
-    legend.text = element_text(size = 11),
-    plot.title = element_text(size = 16)
+    axis.title = element_text(size = 20),
+    axis.text = element_text(size = 14),
+    legend.title = element_text(size = 18),
+    legend.text = element_text(size = 17),
+    plot.title = element_text(size = 22)
   )
 
 plot4 <- wrap_elements(prey_image)
 ```
 
 ```{r}
-# create figure caption
 #| label: fig-workshop3
-#| fig-cap: " Killer whale occurrences, mean group size, and prey abundance by month. The top left panel shows the number of killer whale occurrences by month. The top right panel shows the mean group size of killer whales by month with standard error bars. The bottom left panel shows the number of prey occurrences by month for each prey species."
-#| fig-width: 12
-#| fig-height: 18
+#| fig-cap: " Killer whale occurrences, mean group size, and prey abundance by month. The top panel shows the number of killer whale occurrences by month. The middle panel shows the mean group size of killer whales by month with standard error bars. The bottom panel shows the number of prey occurrences by month for each prey species."
+#| fig-width: 16
+#| fig-height: 25
 #| out-width: "100%"
 
 #combine plots
