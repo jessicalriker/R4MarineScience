@@ -341,3 +341,17 @@ plot4 <- wrap_elements(prey_image)
 plot1 / plot2 / plot3 / plot4
 ```
 
+```{r}
+#save final image
+final_plot <- plot1 / plot2 / plot3 / plot4
+
+ggsave(
+  filename = here::here("docs", "Workshop3_Final_Plot.png"),
+  plot = final_plot,
+  width = 14,
+  height = 10,
+  units = "in",
+  dpi = 300
+)
+```
+
